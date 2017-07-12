@@ -82,21 +82,22 @@ class GifPipeline(object):
                     if not os.path.isfile(save_file_path):
                         urllib.urlretrieve(one_gif_url, save_file_path, downloadCallback)
 
-                    file_md5 = md5Checksum(save_file_path)
+                    if os.path.isfile(save_file_path):
+                        file_md5 = md5Checksum(save_file_path)
 
-                    # 查询数据库是否已经有记录
-                    found_count = self.collection.find({'file_md5': file_md5}).count()
-                    if found_count < 1:
-                        gif_url = [{
-                            'site': 'dwowan',
-                            "org_url": one_gif_url,
-                            'url': u'http://files.gif.gmagon.com/res/dwowan/gif_download/' + '%s.gif' % fname,
-                            'save_file_path': save_file_path,
-                            'file_md5': file_md5,
-                            'size': os.path.getsize(save_file_path),
-                            "comment": item['gif_comment'][index_comment]
-                        }]
-                        self.collection.insert(gif_url)
+                        # 查询数据库是否已经有记录
+                        found_count = self.collection.find({'file_md5': file_md5}).count()
+                        if found_count < 1:
+                            gif_url = [{
+                                'site': 'dwowan',
+                                "org_url": one_gif_url,
+                                'url': u'http://files.gif.gmagon.com/res/dwowan/gif_download/' + '%s.gif' % fname,
+                                'save_file_path': save_file_path,
+                                'file_md5': file_md5,
+                                'size': os.path.getsize(save_file_path),
+                                "comment": item['gif_comment'][index_comment]
+                            }]
+                            self.collection.insert(gif_url)
 
         else:
             raise DropItem(item)

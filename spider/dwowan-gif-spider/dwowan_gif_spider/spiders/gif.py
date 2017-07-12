@@ -13,7 +13,10 @@ class GifSpider(CrawlSpider):
     allowed_domains = ["duowan.com"]
 
     # 定义开始爬取的页面A
-    start_urls = ["http://tu.duowan.com/gallery/127033.html"]
+    start_urls = [
+        "http://tu.duowan.com/gallery/134658.html",
+        "http://tu.duowan.com/gallery/127033.html"
+    ]
 
     # 定义规则，在页面A中爬取符合规则的链接，并调用函数处理
     rules = [
