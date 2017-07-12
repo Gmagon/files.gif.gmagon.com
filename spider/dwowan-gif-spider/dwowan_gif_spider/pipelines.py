@@ -90,9 +90,10 @@ class GifPipeline(object):
                         gif_url = [{
                             'site': 'dwowan',
                             "org_url": one_gif_url,
-                            'url': u'https://files.gif.gmagon.com/res/dwowan/gif_download/' + '%s.gif' % fname,
+                            'url': u'http://files.gif.gmagon.com/res/dwowan/gif_download/' + '%s.gif' % fname,
                             'save_file_path': save_file_path,
                             'file_md5': file_md5,
+                            'size': os.path.getsize(save_file_path),
                             "comment": item['gif_comment'][index_comment]
                         }]
                         self.collection.insert(gif_url)
