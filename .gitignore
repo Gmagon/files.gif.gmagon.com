@@ -1,0 +1,12 @@
+# exclude everything except directory 
+/vm_python
+/build
+/node_modules
+.idea
+/mongodb
+
+# Can ignore specific files
+.DS_Store
+**/*.pyc
+
+
