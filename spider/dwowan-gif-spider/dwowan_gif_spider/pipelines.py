@@ -22,6 +22,7 @@ def md5Checksum(filePath):
             m.update(data)
         return m.hexdigest()
 
+
 def downloadCallback(blocknum, blocksize, totalsize):
     """
     回调函数
@@ -37,7 +38,6 @@ def downloadCallback(blocknum, blocksize, totalsize):
     print("%.2f%%" % percent)
 
 
-
 # Pineline用于处理获取到的item数据
 class GifPipeline(object):
     # 启动爬虫时执行，新建一个名为gif_download的文件
@@ -48,16 +48,13 @@ class GifPipeline(object):
         db = conn['gif_url']
         self.collection = db['gif_collection']
 
-        self.save_dir = u''
+        self.base_dir = u'/Users/ian/gmagon_projects/gmagon_all/files.gif.gmagon.com/docs/res/'
+        self.save_dir = self.base_dir + u'dwowan/gif_download/'
 
-        curDir = os.getcwdu()
+        if not os.path.exists(self.save_dir):
+            os.makedirs(self.save_dir)
 
-        self.f = open('url_gif.txt', 'wb')
-
-        if os.path.exists('gif_download'):
-            shutil.rmtree("gif_download")
-        else:
-            os.mkdir("gif_download")
+        self.f = open(self.save_dir + 'url_gif.txt', 'wb')
 
     # 爬虫启动时调用，处理获取到的item数据,注意item是每一个页面的数据集合
     def process_item(self, item, spider):
@@ -69,25 +66,37 @@ class GifPipeline(object):
             # 将url插入mongo数据库
             # 将url存放进txt，稍后可以用迅雷下载
             index_comment = -1
-            for i in item['gif_url']:
+            for one_gif_url in item['gif_url']:
                 index_comment += 1
-                if ".gif" in i:
-                    self.f.write(i)
+
+                if ".gif" in one_gif_url:
+                    self.f.write(one_gif_url)
                     self.f.write('\r\n')
 
-                    fname = 'gif_download/%s.gif' % uuid.uuid4().hex
-                    result = urllib.urlretrieve(i, fname, downloadCallback)
+                    fname, ext = os.path.splitext(os.path.basename(one_gif_url))
+                    save_file_path = self.save_dir + '%s.gif' % fname
 
-                    # 文件路径
+                    print ('gif_image_save: %s' % save_file_path)
 
-                    gif_url = [{
-                        'site':'',
-                        "url": i,
-                        "comment": item['gif_comment'][index_comment]
-                    }]
-                    self.collection.insert(gif_url)
+                    # 检查是否文件已经下载过，没有下载过，进行下载
+                    if not os.path.isfile(save_file_path):
+                        urllib.urlretrieve(one_gif_url, save_file_path, downloadCallback)
 
-                    print ('%s\n' % result)
+                    file_md5 = md5Checksum(save_file_path)
+
+                    # 查询数据库是否已经有记录
+                    found_count = self.collection.find({'file_md5': file_md5}).count()
+                    if found_count < 1:
+                        gif_url = [{
+                            'site': 'dwowan',
+                            "org_url": one_gif_url,
+                            'url': u'https://files.gif.gmagon.com/res/dwowan/gif_download/' + '%s.gif' % fname,
+                            'save_file_path': save_file_path,
+                            'file_md5': file_md5,
+                            "comment": item['gif_comment'][index_comment]
+                        }]
+                        self.collection.insert(gif_url)
+
         else:
             raise DropItem(item)
         return item
