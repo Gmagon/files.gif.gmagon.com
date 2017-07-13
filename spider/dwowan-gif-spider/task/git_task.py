@@ -11,5 +11,6 @@ assert not repo.bare
 print ('git status: \n %s' % repo.git.status())
 print (repo.git.add('--all'))
 print (repo.git.commit('-m "fix bugs"'))
+print (repo.git.pull())
 print ('end')
 
