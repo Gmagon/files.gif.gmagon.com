@@ -6,9 +6,13 @@ import time
 import os
 import shutil
 import hashlib
-import uuid
+
+
+
 from scrapy.exceptions import DropItem
 import pymongo
+
+
 
 
 def md5Checksum(filePath):
@@ -94,7 +98,10 @@ class GifPipeline(object):
                                 'url': u'http://files.gif.gmagon.com/res/dwowan/gif_download/' + '%s.gif' % fname,
                                 'save_file_path': save_file_path,
                                 'file_md5': file_md5,
+                                'ext': ext,
+                                'dimensions': '0x0',
                                 'size': os.path.getsize(save_file_path),
+                                'is_commit_server': False, # 是否提交到了远程数据库
                                 "comment": item['gif_comment'][index_comment]
                             }]
                             self.collection.insert(gif_url)
@@ -104,7 +111,6 @@ class GifPipeline(object):
         return item
 
 
-        # 爬虫关闭时调用
-
+    # 爬虫关闭时调用
     def close_spider(self, spider):
         print("Done")
