@@ -182,7 +182,7 @@ def runGit(working_dir):
     # 检查是否有变化的文件
     print (u'#检测是否有修改的文件.....')
     diffObj = repo.modified_unstaged_files
-    if len(diffObj) > 0 or want_add:
+    if len(diffObj) > 0:
         now = datetime.datetime.now()
         nowStr = now.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -198,9 +198,9 @@ def runGit(working_dir):
 
     # 检测是否需要push到远程服务器中
     print (u'#检测是否需要上传到远程服务器.....')
-    if want_commit:
+    if want_commit or want_add:
         print(u'git push')
-        repo.push()
+        repo.push(branch_name='master')
         print ('git end')
 
 
