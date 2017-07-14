@@ -1,5 +1,5 @@
 # exclude everything except directory 
-/vm_python
+/vm_python/*
 /build
 /node_modules
 .idea

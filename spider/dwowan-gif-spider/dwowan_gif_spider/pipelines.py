@@ -11,7 +11,7 @@ import datetime
 
 # Libs
 import pymongo
-from git import Repo, cmd as gitCmd
+from gittle import Gittle
 from scrapy.exceptions import DropItem
 from PIL import Image
 from images2gif import readGif, writeGif
@@ -166,48 +166,41 @@ def extract_and_resize_frames(path, resize_to=None):
 
 def runGit(working_dir):
     """执行Git提交及push动作"""
-    rorepo_working_tree_dir = working_dir
-    repo = Repo(rorepo_working_tree_dir)
-    assert not repo.bare
-
-
-    print ('git status: \n %s' % repo.git.status())
-
-    index = repo.index
+    repo_path = working_dir
+    repo_url = u'https://github.com/Gmagon/files.gif.gmagon.com.git'
+    repo = Gittle(repo_path, origin_uri=repo_url)
 
     want_add =  want_commit = False
 
     # 检查是否有新增的文件
     print (u'#检测是否有新增的文件.....')
-    untrackedObj = repo.untracked_files
+    untrackedObj = repo.untracked_files - repo.ignored_files
     if len(untrackedObj) > 0:
-        print(index.add(repo.untracked_files))
+        print(repo.add(untrackedObj))
         want_add = True
 
     # 检查是否有变化的文件
     print (u'#检测是否有修改的文件.....')
-    diffObj = index.diff(None)
+    diffObj = repo.diff_working()
     if len(diffObj) > 0 or want_add:
         now = datetime.datetime.now()
         nowStr = now.strftime('%Y-%m-%d %H:%M:%S')
-        print (index.commit('%s dwowan gif update [fileChanges=%d] [fileAdd=%d]'
-                            % (nowStr, len(diffObj), len(untrackedObj))
-               ))
+
+        commit_user = 'Ian'
+        commit_user_email = 'ian@gmagon.com'
+        commit_msg = '%s dwowan gif update [fileChanges=%d] [fileAdd=%d]' % (nowStr, len(diffObj), len(untrackedObj))
+
+        repo.stage(diffObj)
+
+        print (repo.commit(name=commit_user, email=commit_user_email, message=commit_msg))
+
         want_commit = True
 
     # 检测是否需要push到远程服务器中
     print (u'#检测是否需要上传到远程服务器.....')
     if want_commit:
-        origin=repo.remotes.origin
-
-        def progress(op_code, cur_count, max_count=None, message=''):
-            print (op_code, cur_count, max_count, message)
-
-        print(u'git pull')
-        print (origin.pull(refspec='master:master', progress=progress))
-
         print(u'git push')
-        print (origin.push(refspec='master:master', progress=progress))
+        repo.push()
         print ('git end')
 
 
