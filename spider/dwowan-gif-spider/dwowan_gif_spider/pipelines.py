@@ -174,14 +174,14 @@ def runGit(working_dir):
 
     # 检查是否有新增的文件
     print (u'#检测是否有新增的文件.....')
-    untrackedObj = repo.untracked_files - repo.ignored_files
+    untrackedObj = repo.modified_unstaged_files
     if len(untrackedObj) > 0:
-        print(repo.add(untrackedObj))
+        #print(repo.add(untrackedObj))
         want_add = True
 
     # 检查是否有变化的文件
     print (u'#检测是否有修改的文件.....')
-    diffObj = repo.diff_working()
+    diffObj = repo.modified_unstaged_files
     if len(diffObj) > 0 or want_add:
         now = datetime.datetime.now()
         nowStr = now.strftime('%Y-%m-%d %H:%M:%S')
