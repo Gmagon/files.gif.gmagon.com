@@ -169,7 +169,7 @@ def runGit(working_dir):
     repo_path = working_dir
     repo_url = u'https://github.com/Gmagon/files.gif.gmagon.com.git'
 
-    auth = GittleAuth(username='lauer3912', password='Hapsion1985')
+    auth = GittleAuth('lauer3912', 'Hapsion1985')
     repo = Gittle(repo_path, origin_uri=repo_url, auth=auth)
 
     want_add =  want_commit = False
