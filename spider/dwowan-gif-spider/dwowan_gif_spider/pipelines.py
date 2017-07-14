@@ -200,7 +200,7 @@ def runGit(working_dir):
     print (u'#检测是否需要上传到远程服务器.....')
     if want_commit or want_add:
         print(u'git push')
-        repo.auth(username='lauer3912', password='Hapsion1985')
+        #repo.auth(username='lauer3912', password='Hapsion1985')
         repo.push(branch_name='master')
         print ('git end')
 
