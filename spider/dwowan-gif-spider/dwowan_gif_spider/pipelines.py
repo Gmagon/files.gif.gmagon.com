@@ -167,7 +167,7 @@ def extract_and_resize_frames(path, resize_to=None):
 def runGit(working_dir):
     """执行Git提交及push动作"""
     repo_path = working_dir
-    repo_url = u'https://github.com/Gmagon/files.gif.gmagon.com.git'
+    repo_url = u'https://lauer3912:Hapsion1985@github.com/Gmagon/files.gif.gmagon.com.git'
     repo = Gittle(repo_path, origin_uri=repo_url)
 
     want_add =  want_commit = False
