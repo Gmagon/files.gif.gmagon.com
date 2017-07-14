@@ -11,7 +11,7 @@ import datetime
 
 # Libs
 import pymongo
-from gittle import Gittle
+from gittle import Gittle, GittleAuth
 from scrapy.exceptions import DropItem
 from PIL import Image
 from images2gif import readGif, writeGif
@@ -168,7 +168,9 @@ def runGit(working_dir):
     """执行Git提交及push动作"""
     repo_path = working_dir
     repo_url = u'https://github.com/Gmagon/files.gif.gmagon.com.git'
-    repo = Gittle(repo_path, origin_uri=repo_url)
+
+    auth = GittleAuth(username='lauer3912', password='Hapsion1985')
+    repo = Gittle(repo_path, origin_uri=repo_url, auth=auth)
 
     want_add =  want_commit = False
 
@@ -200,7 +202,6 @@ def runGit(working_dir):
     print (u'#检测是否需要上传到远程服务器.....')
     if want_commit or want_add:
         print(u'git push')
-        #repo.auth(username='lauer3912', password='Hapsion1985')
         repo.push(branch_name='master')
         print ('git end')
 
