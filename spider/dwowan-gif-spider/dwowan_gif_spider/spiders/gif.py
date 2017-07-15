@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 # coding：UTF-8
+
+# system
+import os
+
+# lib
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 
+# local
 from ..items import GifItem
 
 
@@ -13,11 +19,24 @@ class GifSpider(CrawlSpider):
     # 可选，定义爬取区域，超出区域的链接不爬取
     allowed_domains = ["duowan.com"]
 
+    cur_dir = os.path.split(os.path.realpath(__file__))[0]
     # 定义开始爬取的页面A
-    start_urls = [
-        "http://tu.duowan.com/gallery/134658.html",
-        "http://tu.duowan.com/gallery/127033.html"
-    ]
+    start_urls = []
+    # 读取文件
+    fh_url = open(cur_dir + '/urls.txt', 'r')
+    fh_line = fh_url.readline()
+    while fh_line:
+        start_urls.append(fh_line)
+        fh_line = fh_url.readline()
+
+    """
+    old code:
+    # start_urls = [
+    #     "http://tu.duowan.com/gallery/134658.html",
+    #     "http://tu.duowan.com/gallery/127033.html"
+    # ]
+    """
+
 
     # 定义规则，在页面A中爬取符合规则的链接，并调用函数处理
     rules = [

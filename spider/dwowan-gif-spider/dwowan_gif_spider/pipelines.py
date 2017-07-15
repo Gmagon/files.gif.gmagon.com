@@ -8,10 +8,12 @@ import pymongo
 from PIL import Image
 from scrapy.exceptions import DropItem
 
-from tools.checksum import md5Checksum
+
 # local
+from tools.checksum import md5Checksum
 from tools.git_mgr import runGit
 from tools.resize_gif import getAutoThumbSize, resize_gif
+from tools.upload_gifserver import  upload_data_with_mongodb
 
 
 def downloadCallback(blocknum, blocksize, totalsize):
@@ -123,7 +125,9 @@ class GifPipeline(object):
         work_dir = u'/Users/ian/gmagon_projects/gmagon_all/files.gif.gmagon.com/'
         runGit(working_dir=work_dir)
 
-        # 同步到数据库中
+        # 然后通过审核本地的mongodb中的数据来，分类，打标签，提交到远程数据库中。
+        # 方法: (1)图像检测AI分析; (2)图像原先内容描述处理
+        # 还有一种办法，就是图片先传入到数据库中，然后，由后面的人员来实现对图片打标签
+        upload_data_with_mongodb(self.collection)
 
-
-        print("Done")
+        print(u"爬虫... Done")
