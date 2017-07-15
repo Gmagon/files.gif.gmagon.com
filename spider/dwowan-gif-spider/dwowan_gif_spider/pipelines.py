@@ -164,6 +164,9 @@ def runGit(working_dir):
     """执行Git提交及push动作"""
     rorepo_working_tree_dir = working_dir
     repo = Repo(rorepo_working_tree_dir)
+    gitShell = repo.git
+
+
     assert repo.bare == False  # 版本库是否为空版本库
 
     print ('git status: \n %s' % repo.git.status())
@@ -180,6 +183,8 @@ def runGit(working_dir):
     untracked_files = repo.untracked_files  # 版本库中未跟踪的文件列表
     if len(untracked_files) > 0:
         print (index.add(untracked_files))
+        gitShell.add(untracked_files)
+
         want_add = True
 
     # 检查是否有变化的文件
@@ -189,11 +194,13 @@ def runGit(working_dir):
         now = datetime.datetime.now()
         nowStr = now.strftime('%Y-%m-%d %H:%M:%S')
 
-        git = repo.git
-
-        print (index.commit('%s dwowan gif update [fileChanges=%d] [fileAdd=%d]'
+        commit_msg = '%s dwowan gif update [fileChanges=%d] [fileAdd=%d]' \
                             % (nowStr, len(diffObj), len(untracked_files))
-               ))
+        gitShell.commit('-am', commit_msg)
+
+        # print (index.commit('%s dwowan gif update [fileChanges=%d] [fileAdd=%d]'
+        #                     % (nowStr, len(diffObj), len(untracked_files))
+        #        ))
 
         want_commit = True
 
