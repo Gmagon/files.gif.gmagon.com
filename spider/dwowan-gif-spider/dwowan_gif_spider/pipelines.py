@@ -197,7 +197,7 @@ def runGit(working_dir):
         commit_msg = '%s dwowan gif update [fileChanges=%d] [fileAdd=%d]' \
                             % (nowStr, len(diffObj), len(untracked_files))
         print (index.commit(commit_msg))
-        gitShell.commit('-am', commit_msg)
+        gitShell.commit('-am', '\"' + commit_msg + '\"')
 
         want_commit = True
 
