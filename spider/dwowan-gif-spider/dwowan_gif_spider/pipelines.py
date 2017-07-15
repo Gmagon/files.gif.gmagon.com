@@ -11,7 +11,7 @@ import datetime
 
 # Libs
 import pymongo
-from gittle import Gittle, GittleAuth
+
 from scrapy.exceptions import DropItem
 from PIL import Image
 from images2gif import readGif, writeGif
@@ -163,14 +163,13 @@ def extract_and_resize_frames(path, resize_to=None):
 
 
 
-
+from git import Repo
 def runGit(working_dir):
     """执行Git提交及push动作"""
     repo_path = working_dir
     repo_url = u'https://github.com/Gmagon/files.gif.gmagon.com.git'
-
-    auth = GittleAuth('lauer3912', 'Hapsion1985')
-    repo = Gittle(repo_path, origin_uri=repo_url, auth=auth)
+    repo = Repo(repo_path)
+    assert repo.bare == False
 
     want_add =  want_commit = False
 
