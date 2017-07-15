@@ -26,7 +26,7 @@ class GifSpider(CrawlSpider):
     fh_url = open(cur_dir + '/urls.txt', 'r')
     fh_line = fh_url.readline()
     while fh_line:
-        start_urls.append(fh_line)
+        start_urls.append(fh_line.split('\n'))
         fh_line = fh_url.readline()
 
     """
