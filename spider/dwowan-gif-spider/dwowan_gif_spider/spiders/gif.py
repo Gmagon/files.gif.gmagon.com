@@ -34,4 +34,6 @@ class GifSpider(CrawlSpider):
             '//*[@id="picture-pageshow"]/div[1]/div[@class="pic-box"]/a/span[@class="pic-box-item"]/@data-img').extract()
         urlItem['gif_comment'] = response.selector.xpath(
             '//*[@id="picture-pageshow"]/div[1]/div[@class="pic-box"]/p[@class="comment"]/text()').extract()
+
+        # yield all item
         yield urlItem
