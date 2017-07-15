@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # coding：UTF-8
 import hashlib
+
+
 def md5Checksum(filePath):
     """获取文件的md5值"""
     with open(filePath, 'rb') as fh:

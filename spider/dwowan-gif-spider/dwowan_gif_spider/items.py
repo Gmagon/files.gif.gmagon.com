@@ -10,4 +10,4 @@ class GifItem(scrapy.Item):
     # 要获取更多的数据，可以增加item的项
     gif_url = scrapy.Field()
     gif_comment = scrapy.Field()
-    pass  
+    pass

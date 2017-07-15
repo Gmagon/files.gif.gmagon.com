@@ -11,7 +11,8 @@ def getAutoThumbSize(orgSize, min_spec):
     ratio = min(w_ratio, h_ratio)
     ratio = ratio if ratio > 1 else 1
 
-    return (org_width/ratio, org_height/ratio)
+    return (org_width / ratio, org_height / ratio)
+
 
 def resize_gif(path, save_as=None, resize_to=None):
     """
@@ -113,5 +114,3 @@ def extract_and_resize_frames(path, resize_to=None):
         pass
 
     return all_frames
-
-

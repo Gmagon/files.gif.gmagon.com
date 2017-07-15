@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # coding：UTF-8
-from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from scrapy.contrib.spiders import CrawlSpider, Rule
+
 from ..items import GifItem
 
 

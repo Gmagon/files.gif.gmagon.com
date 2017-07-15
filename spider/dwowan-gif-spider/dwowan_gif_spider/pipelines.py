@@ -1,25 +1,17 @@
 # -*- coding: utf-8 -*-
 # coding：UTF-8
-import urllib
-import urllib2
-import time
 import os
-import shutil
-
-
-
+import urllib
 
 # Libs
 import pymongo
-
-from scrapy.exceptions import DropItem
 from PIL import Image
+from scrapy.exceptions import DropItem
 
+from tools.checksum import md5Checksum
 # local
 from tools.git_mgr import runGit
 from tools.resize_gif import getAutoThumbSize, resize_gif
-from tools.checksum import md5Checksum
-
 
 
 def downloadCallback(blocknum, blocksize, totalsize):
@@ -123,7 +115,6 @@ class GifPipeline(object):
             raise DropItem(item)
         return item
 
-
     # 爬虫关闭时调用
     def close_spider(self, spider):
         self.fh_url_gif.close()
@@ -134,5 +125,5 @@ class GifPipeline(object):
 
         # 同步到数据库中
 
-        
+
         print("Done")

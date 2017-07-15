@@ -2,7 +2,6 @@
 
 from scrapy import cmdline
 
-
 # 先执行爬虫
 cmdline.execute("scrapy crawl dwowan_gif_spider".split())
 
@@ -15,4 +14,3 @@ cmdline.execute("scrapy crawl dwowan_gif_spider".split())
 
 
 # 自动调度执行，循环操作
-
