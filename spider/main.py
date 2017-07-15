@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
+import datetime
+#
 from git import Actor, Repo
 
 repo_path = u'/Users/ian/gmagon_projects/gmagon_all/files.gif.gmagon.com/'
@@ -24,11 +26,28 @@ if len(untracked_files) > 0:
 
 # 判断是否有更改的文件
 diff = index.diff(None)
-if len(diff) > 0:
-    index.commit("my test", author=author, committer=committer)
+if len(diff) > 0 or want_add:
+    now = datetime.datetime.now()
+    nowStr = now.strftime('%Y-%m-%d %H:%M:%S')
+
+    git = repo.git
+    git.commit('-am', 'this is test')
+
+    #new_commit = index.commit("my test %s" % nowStr, author=author, committer=committer)
+    #print (new_commit)
+
     want_commit = True
 
+print (u'#检测是否需要上传到远程服务器.....')
+if want_commit:
+    origin=repo.remotes.origin
 
+    def progress(op_code, cur_count, max_count=None, message=''):
+        print (u'上传进度:', op_code, cur_count, max_count, message)
+
+    print(u'git push')
+    #print (origin.push(refspec='master:master', progress=progress))
+    print ('git end')
 
 
 

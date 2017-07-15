@@ -17,10 +17,6 @@ from PIL import Image
 from images2gif import readGif, writeGif
 
 
-
-
-
-
 def md5Checksum(filePath):
     """获取文件的md5值"""
     with open(filePath, 'rb') as fh:
@@ -163,45 +159,55 @@ def extract_and_resize_frames(path, resize_to=None):
 
 
 
-from git import Repo
+from git import Actor, Repo
 def runGit(working_dir):
     """执行Git提交及push动作"""
-    repo_path = working_dir
-    repo_url = u'https://github.com/Gmagon/files.gif.gmagon.com.git'
-    repo = Repo(repo_path)
-    assert repo.bare == False
+    rorepo_working_tree_dir = working_dir
+    repo = Repo(rorepo_working_tree_dir)
+    assert repo.bare == False  # 版本库是否为空版本库
 
-    want_add =  want_commit = False
+    print ('git status: \n %s' % repo.git.status())
+
+    author = Actor("Ian", "ian@gmagon.com")
+    committer = Actor("Ian", "ian@gmagon.com")
+    want_add = want_commit = False
+
+
+    index = repo.index
 
     # 检查是否有新增的文件
     print (u'#检测是否有新增的文件.....')
-    untrackedObj = repo.modified_unstaged_files
-    if len(untrackedObj) > 0:
-        #print(repo.add(untrackedObj))
+    untracked_files = repo.untracked_files  # 版本库中未跟踪的文件列表
+    if len(untracked_files) > 0:
+        print (index.add(untracked_files))
         want_add = True
 
     # 检查是否有变化的文件
     print (u'#检测是否有修改的文件.....')
-    diffObj = repo.modified_unstaged_files
-    if len(diffObj) > 0:
+    diffObj = index.diff(None)
+    if len(diffObj) > 0 or want_add:
         now = datetime.datetime.now()
         nowStr = now.strftime('%Y-%m-%d %H:%M:%S')
 
-        commit_user = 'Ian'
-        commit_user_email = 'ian@gmagon.com'
-        commit_msg = '%s dwowan gif update [fileChanges=%d] [fileAdd=%d]' % (nowStr, len(diffObj), len(untrackedObj))
+        git = repo.git
 
-        repo.stage(diffObj)
-
-        print (repo.commit(name=commit_user, email=commit_user_email, message=commit_msg))
+        print (index.commit('%s dwowan gif update [fileChanges=%d] [fileAdd=%d]'
+                            % (nowStr, len(diffObj), len(untracked_files))
+               ))
 
         want_commit = True
 
     # 检测是否需要push到远程服务器中
     print (u'#检测是否需要上传到远程服务器.....')
-    if want_commit or want_add:
+    if want_commit:
+        origin=repo.remotes.origin
+
+        def progress(op_code, cur_count, max_count=None, message=''):
+            print (u'上传进度:')
+            print (op_code, cur_count, max_count, message)
+
         print(u'git push')
-        repo.push(origin_uri=repo_url, branch_name='master')
+        print (origin.push(refspec='master:master', progress=progress))
         print ('git end')
 
 
