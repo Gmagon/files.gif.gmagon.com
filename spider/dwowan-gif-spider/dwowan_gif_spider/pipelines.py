@@ -182,7 +182,7 @@ def runGit(working_dir):
     print (u'#检测是否有新增的文件.....')
     untracked_files = repo.untracked_files  # 版本库中未跟踪的文件列表
     if len(untracked_files) > 0:
-        print (index.add(untracked_files))
+        #print (index.add(untracked_files))
         gitShell.add(untracked_files)
 
         want_add = True
@@ -197,7 +197,7 @@ def runGit(working_dir):
         commit_msg = '%s dwowan gif update [fileChanges=%d] [fileAdd=%d]' \
                             % (nowStr, len(diffObj), len(untracked_files))
 
-        print (index.commit(commit_msg))
+        #print (index.commit(commit_msg))
         gitShell.commit('-am', '\"' + commit_msg + '\"')
 
         want_commit = True
@@ -306,7 +306,7 @@ class GifPipeline(object):
     # 爬虫关闭时调用
     def close_spider(self, spider):
         self.fh_url_gif.close()
-        
+
         work_dir = u'/Users/ian/gmagon_projects/gmagon_all/files.gif.gmagon.com/'
         runGit(working_dir=work_dir)
 
