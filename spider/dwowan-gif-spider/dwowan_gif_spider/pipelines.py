@@ -196,6 +196,7 @@ def runGit(working_dir):
 
         commit_msg = '%s dwowan gif update [fileChanges=%d] [fileAdd=%d]' \
                             % (nowStr, len(diffObj), len(untracked_files))
+
         print (index.commit(commit_msg))
         gitShell.commit('-am', '\"' + commit_msg + '\"')
 
@@ -231,7 +232,7 @@ class GifPipeline(object):
         if not os.path.exists(self.save_dir):
             os.makedirs(self.save_dir)
 
-        self.f = open(self.save_dir + 'url_gif.txt', 'wb')
+        self.fh_url_gif = open(self.save_dir + 'url_gif.txt', 'wb')
 
     # 爬虫启动时调用，处理获取到的item数据,注意item是每一个页面的数据集合
     def process_item(self, item, spider):
@@ -247,8 +248,8 @@ class GifPipeline(object):
                 index_comment += 1
 
                 if ".gif" in one_gif_url:
-                    self.f.write(one_gif_url)
-                    self.f.write('\r\n')
+                    self.fh_url_gif.write(one_gif_url)
+                    self.fh_url_gif.write('\r\n')
 
                     fname, ext = os.path.splitext(os.path.basename(one_gif_url))
                     save_file_path = self.save_dir + '%s.gif' % fname
@@ -304,6 +305,8 @@ class GifPipeline(object):
 
     # 爬虫关闭时调用
     def close_spider(self, spider):
+        self.fh_url_gif.close()
+        
         work_dir = u'/Users/ian/gmagon_projects/gmagon_all/files.gif.gmagon.com/'
         runGit(working_dir=work_dir)
 
