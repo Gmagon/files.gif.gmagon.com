@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # coding：UTF-8
 
+from PIL import Image
+
 def getAutoThumbSize(orgSize, min_spec):
     org_width, org_height = orgSize
 
