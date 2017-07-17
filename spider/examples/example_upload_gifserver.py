@@ -2,7 +2,8 @@
 
 # system
 import httplib
-import urllib
+import json
+import trace
 
 # lib
 import pymongo
@@ -15,29 +16,38 @@ def post_gif_data_to_server(item, api):
     :return:
     """
 
-    params = urllib.urlencode({
-        "op": "create",
-        "where": {
-            "md5": item[u'file_md5']
-        },
-        "data": {
-            "name": item[u'name'],
-            "thumb": item[u'thumb'],
-            "url": item[u'url'],
-            "size": item[u'size'],
-            "dimensions": item[u'dimensions'],
-            "ext": item[u'ext'],
-            "md5": item[u'file_md5'],
-            "description": item[u'comment']
-        }
-    })
-    headers = {
-        "Content-Type: application/json"
-    }
+    try:
+        params = ({
+            "op": "create",
+            "where": {
+                "md5": item[u'file_md5']
+            },
+            "data": {
+                "name": item[u'name'],
+                "thumb": item[u'thumb'],
+                "url": item[u'url'],
+                "size": item[u'size'],
+                "dimensions": item[u'dimensions'],
+                "ext": item[u'ext'],
+                "md5": item[u'file_md5'],
+                "description": item[u'comment']
+            }
+        })
 
-    conn = httplib.HTTPConnection(api)
-    conn.request("POST", "", params, headers)
-    responese = conn.getresponse()
+        body = json.JSONEncoder().encode(params)
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "text/plain"
+        }
+
+        conn = httplib.HTTPConnection("127.0.0.1", 5000)
+        conn.request(method="POST", url=api, body=body, headers=headers)
+        response = conn.getresponse()
+        if response.status == 200:
+            return True
+
+    except Exception , e:
+        trace(e)
 
     return False
 
@@ -51,7 +61,7 @@ collection = mongo_db['gif_collection']
 # Find somethings are not upload in gif_server
 items_count = collection.find({'is_commit_server': False}).count()
 
-server_api = "http://127.0.0.1:5000/plugin/gif/api/v1.0.0/data_items"
+server_api = "/plugin/gif/api/v1.0.0/data_items"
 
 if items_count > 0:
     for item in collection.find({'is_commit_server': False}):
