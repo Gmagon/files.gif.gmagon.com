@@ -95,7 +95,8 @@ class GifPipeline(object):
                                 if found_count < 1:
                                     gif_url = [{
                                         'site': 'dwowan',
-                                        "org_url": one_gif_url,
+                                        'name': fname,
+                                        'org_url': one_gif_url,
                                         'url': u'http://files.gif.gmagon.com/res/dwowan/gif_download/' + '%s.gif' % fname,
                                         'thumb': u'http://files.gif.gmagon.com/res/dwowan/gif_download/' + '%s.thumbnail.gif' % fname,
                                         'save_file_path': save_file_path,
