@@ -38,19 +38,11 @@ def post_gif_data_to_server(item, api):
     try:
         params = ({
             "op": "create",
-            "where": {
+            "where1": {
                 "md5": item[u'file_md5']
             },
-            "data": {
-                "name": item[u'name'],
-                "thumb": item[u'thumb'].replace('files.gif.gmagon.com', gif_files_url),
-                "url": item[u'url'].replace('files.gif.gmagon.com', gif_files_url),
-                "size": item[u'size'],
-                "dimensions": item[u'dimensions'],
-                "ext": item[u'ext'],
-                "md5": item[u'file_md5'],
-                "description": item[u'comment']
-            }
+            "where": "id > 13",
+            "filter": "id = 11"
         })
 
         body = json.JSONEncoder().encode(params)
@@ -77,7 +69,7 @@ mongo_conn = pymongo.MongoClient('localhost', 27017)
 mongo_db = mongo_conn['gif_url']
 collection = mongo_db['gif_collection']
 
-enable_recover = True
+enable_recover = True ## 是否重新操作
 
 if enable_recover:
     for item in collection.find({'is_commit_server': True}):
@@ -86,7 +78,7 @@ if enable_recover:
 # Find somethings are not upload in gif_server
 items = collection.find({'is_commit_server': False})
 
-server_api = "/plugin/gif/api/v1.0.0/data_items"
+server_api = "/plugin/gif/api/v1.0.0/items_tags_data"
 
 if items.count() > 0:
     for item in items:
