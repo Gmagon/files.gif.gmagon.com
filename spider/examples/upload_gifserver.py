@@ -19,7 +19,7 @@ office_gif_server = {
     "port": None
 }
 test_gif_server = {
-    "server": "192.168.3.6",
+    "server": ["127.0.0.1", "192.168.3.6"][1],
     "port": 5000
 }
 

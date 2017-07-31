@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-
 
+"""
+本实例用途：
+用来创建Item与tag的对应关系，建立联系
+1. 为以后用来管理Item与tag提供帮助
+
+下面是具体用法
+
+"""
+
+
 # system
 import httplib
 import json
@@ -19,7 +29,7 @@ office_gif_server = {
     "port": None
 }
 test_gif_server = {
-    "server": "192.168.3.6",
+    "server": ["127.0.0.1", "192.168.3.6"][1],
     "port": 5000
 }
 
