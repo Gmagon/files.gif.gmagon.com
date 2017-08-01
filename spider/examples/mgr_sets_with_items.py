@@ -44,7 +44,7 @@ def create_new_set():
     api = "/plugin/gif/api/v1.0.0/data_sets"
     conn = None
     try:
-        set_name = u"十六张让你笑的图"
+        set_name = u"十张让你笑的图"
 
         params = ({
             "op": "create",
@@ -53,8 +53,8 @@ def create_new_set():
             },
             "data": {
                 "name": set_name,
-                "thumb": "",
-                "url": "",
+                "thumb": "http://192.168.3.6:5001/res/dwowan/gif_download/bf6ba5ccda5cc3eee70b356b9f71762a.thumbnail.gif",
+                "url": "http://192.168.3.6:5001/res/dwowan/gif_download/bf6ba5ccda5cc3eee70b356b9f71762a.thumbnail.gif",
                 "description": "测试数据，好玩而已... 不要当真"
             }
         })
@@ -85,6 +85,54 @@ def create_new_set():
     return set_id
 
 
+def build_set_with_items2(set_id=None):
+    if set_id is None:
+        print(u'set_id is null')
+        return
+
+    api = "/plugin/gif/api/v1.0.0/data_set2items"
+
+    def sub_create_data(set_id, item_id, order):
+        try:
+            params = ({
+                "op": "create",
+                "where": {
+                    "set_id": set_id,
+                    "item_id": item_id
+                },
+                "data": {
+                    "set_id": set_id,
+                    "item_id": item_id,
+                    "order": order,
+                    "bewrite": u"ItemID-%s 测试数据" % item_id
+                }
+            })
+
+            body = json.JSONEncoder().encode(params)
+            headers = {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+
+            conn = httplib.HTTPConnection(gif_data_server["server"], gif_data_server["port"])
+            conn.request(method="POST", url=api, body=body, headers=headers)
+            response = conn.getresponse()
+            if response.status == 200:
+                return True
+
+        except Exception, e:
+            trace(e)
+
+        return False
+
+    order_index = -1
+    for item_id in range(64, 108):
+        order_index = order_index + 1
+        sub_create_data(set_id, item_id, order_index)
+
+
+
+
 def build_set_with_items(set_id=None):
     if set_id is None:
         print(u'set_id is null')
@@ -103,8 +151,6 @@ def build_set_with_items(set_id=None):
                     'id': set_id
                 },
                 "data": {
-                    "set_id": set_id,
-                    "item_id": item_id,
                     "order": order,
                     "bewrite": u"ItemID-%s 测试数据" % item_id
                 }
@@ -134,6 +180,6 @@ def build_set_with_items(set_id=None):
 
 
 new_set_id = create_new_set()
-build_set_with_items(new_set_id)
+build_set_with_items2(new_set_id)
 
 print(u'......')
